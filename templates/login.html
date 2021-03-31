@@ -7,37 +7,37 @@
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{url_for('static',filename='styles/login.css')}}">
+    <link rel="stylesheet" href="../static/styles/login.css">
 </head>
 
-<body class="d-xl-flex justify-content-xl-center align-items-xl-center" style="font-size: 20px;font-weight: bold;letter-spacing: 1px;background: linear-gradient(-90deg, rgb(193,61,255), rgb(35,96,214));margin-top: 15vh;">
+<body class="d-xl-flex justify-content-xl-center align-items-xl-center">
     <div class="container" style="margin: -1px;">
-        <div class="row" style="padding: 20px;background: #ffffff;border-radius: 15px;">
-            <div class="col-md-6" style="background: url(&quot;static/img/img01.jpg&quot;) center / cover no-repeat;padding: 0px;">
+        <div class="row loginRow">
+            <div class="col-md-6" id="loginCol1">
                 <div></div>
             </div>
-            <div class="col-md-6" style="padding: 50px;">
-                <div style="padding: 7px;">
+            <div class="col-md-6" id="loginCol2">
+                <div class="loginWrapper">
                     <div>
                         <div>
-                            <p style="font-size: 25px;">User Login</p>
+                            <p class="headingParagraph">User Login</p>
                         </div>
-                        <div style="background: #f1f1f1;border-radius: 25px;padding: 10px;width: 400px;">
-                            <i class="fa fa-envelope" style="margin-left: 15px;color: rgb(152,152,152);"></i>
-                            <input type="text" style="border-style: none;background: rgba(255,255,255,0);margin-left: 10px;color: rgb(152,152,152);width: 300px;" placeholder="Email" name="email" autocomplete="on" autofocus="" inputmode="email" required="">
+                        <div class="loginCol">
+                            <i class="fa fa-envelope mailIcon" ></i>
+                            <input type="text" class="loginInput" placeholder="Email" name="email" autocomplete="on" autofocus="" inputmode="email" required="">
                         </div>
-                        <div style="background: #f1f1f1;border-radius: 25px;padding: 10px;margin-top: 15px;width: 400px;">
-                            <i class="fa fa-lock" style="margin-left: 15px;color: rgb(152,152,152);font-size: 30px;"></i>
-                            <input type="password" style="border-style: none;background: rgba(255,255,255,0);margin-left: 10px;color: rgb(152,152,152);width: 300px;" placeholder="Password" autocomplete="off" required="" minlength="6" maxlength="20" name="password">
+                        <div class="loginCol">
+                            <i class="fa fa-lock lockIcon" ></i>
+                            <input type="password" class="loginInput" placeholder="Password" autocomplete="off" required="" minlength="6" maxlength="20" name="password">
                         </div>
-                        <button type="button" class="btn btn-primary btn-lg btn-block" style="background: #95e47a;border-radius: 25px;padding: 10px;margin-top: 15px;width: 400px;">Login</button>
+                        <button type="button" class="btn btn-primary btn-lg btn-block subBtn">Login</button>
 <!--                        <div style="background: #95e47a;border-radius: 25px;padding: 10px;margin-top: 15px;width: 400px;">-->
 <!--                            <div>-->
 <!--                                <button type="submit" class="text-center btn btn-outline-primary" style="margin-bottom: 0px;color: rgb(255,255,255);font-weight: normal;">Login</button>-->
 <!--                            </div>-->
 <!--                        </div>-->
                         <div>
-                            <p class="text-center" style="font-weight: normal;margin-top: 10px;color: rgb(152,152,152);width: 400px;">Want to register? <a href="/signup">Click here</a></p>
+                            <p class="text-center registerLinkParagraph">Want to register? <a href="/signup">Click here</a></p>
                         </div>
                     </div>
                 </div>

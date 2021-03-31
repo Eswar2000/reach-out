@@ -1,0 +1,98 @@
+body {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    background: linear-gradient(-90deg, rgb(193,61,255), rgb(35,96,214));
+    margin-top: 15vh;
+}
+
+/* style="font-size: 20px;font-weight: bold;letter-spacing: 1px;background: linear-gradient(-90deg, rgb(193,61,255), rgb(35,96,214));margin-top: 15vh;" */
+
+.subBtn {
+    background: #95e47a;
+    border-radius: 25px;
+    padding: 10px;
+    margin-top: 15px;
+    width: 400px;
+}
+
+/* style="background: #95e47a;border-radius: 25px;padding: 10px;margin-top: 15px;width: 400px;" */
+
+.loginCol {
+    background: #f1f1f1;
+    border-radius: 25px;
+    padding: 10px;
+    width: 400px;
+    margin-top: 15px;
+}
+
+/* style="background: #f1f1f1;border-radius: 25px;padding: 10px;width: 400px;" */
+/* style="background: #f1f1f1;border-radius: 25px;padding: 10px;margin-top: 15px;width: 400px;" */
+
+.loginInput {
+    border-style: none;
+    background: rgba(255,255,255,0);
+    margin-left: 10px;color: rgb(152,152,152);
+    width: 300px;
+}
+
+/* style="border-style: none;background: rgba(255,255,255,0);margin-left: 10px;color: rgb(152,152,152);width: 300px;" */
+
+.mailIcon {
+    margin-left: 15px;
+    color: rgb(152,152,152);
+}
+/* style="margin-left: 15px;color: rgb(152,152,152);" */
+
+.lockIcon {
+    margin-left: 15px;
+    color: rgb(152,152,152);
+    font-size: 30px;
+}
+/* style="margin-left: 15px;color: rgb(152,152,152);font-size: 30px;" */
+
+.headingParagraph {
+    font-size: 25px;
+}
+
+/* style="font-size: 25px;" */
+
+.registerLinkParagraph {
+    font-weight: normal;
+    margin-top: 10px;
+    color: rgb(152,152,152);
+    width: 400px;
+}
+
+/* style="font-weight: normal;margin-top: 10px;color: rgb(152,152,152);width: 400px;" */
+
+.loginWrapper {
+    padding: 7px;
+}
+
+ /*style="padding: 7px;"*/
+
+.loginRow {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 15px;
+}
+
+/*style="padding: 20px;background: #ffffff;border-radius: 15px;"*/
+
+#loginCol1 {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(../img/img01.jpg);
+    padding: 0;
+}
+
+/*style="background: url(&quot;static/img/img01.jpg&quot;) center / cover no-repeat;padding: 0px;"*/
+
+#loginCol2 {
+    padding: 50px;
+}
+
+/*style="padding: 50px;"*/
+
