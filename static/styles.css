@@ -1,0 +1,104 @@
+body {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    background: linear-gradient(-90deg, rgb(193,61,255), rgb(35,96,214));
+    margin-top: 15vh;
+}
+
+.container {
+    margin: -1px;
+}
+
+
+.loginRow {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 15px;
+}
+
+.loginCol2 {
+    padding: 50px;
+}
+
+.loginColWrapper {
+    padding: 7px;
+}
+
+.inputDiv {
+    background: #f1f1f1;
+    border-radius: 25px;
+    padding: 10px;
+    margin-top: 15px;
+    width: 400px;
+}
+
+.input {
+    border-style: none;
+    background: rgba(255,255,255,0);
+    margin-left: 10px;
+    color: rgb(152,152,152);
+    width: 300px;
+}
+
+.emailIcon {
+    margin-left: 15px;
+    color: rgb(152,152,152);
+}
+
+.pwdIcon {
+    margin-left: 15px;
+    color: rgb(152,152,152);
+    font-size: 30px;
+}
+
+.loginBtn {
+    background: #95e47a;
+    border-radius: 25px;
+    padding: 10px;
+    margin-top: 10px;
+    width: 400px;
+}
+
+#linkToSignup {
+    font-weight: normal;
+    margin-top: 10px;
+    width: 400px;
+}
+
+#cookieSignIn {
+    font-weight: normal;
+    margin-top: 15px;
+    margin-left: 5px;
+}
+
+/* ------------------------------------------------------------END OF SIGN IN PAGE------------------------------------------------------------ */
+
+.signupWrapper {
+    background: #ffffff;
+    width: 800px;
+    border-radius: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 500px;
+}
+
+.registerRow {
+    padding: 50px;
+}
+
+.userIcon {
+    margin-left: 15px;
+    color: rgb(152,152,152);
+    font-size: 25px;
+}
+
+.registerDiv {
+    padding-right: 150px;
+    padding-left: 135px;
+}
+
+/* ------------------------------------------------------------END OF SIGN UP PAGE------------------------------------------------------------ */
+
+
+

@@ -4,48 +4,50 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Login</title>
+    <title>Sign In</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../static/styles/login.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 
 <body class="d-xl-flex justify-content-xl-center align-items-xl-center">
-    <div class="container" style="margin: -1px;">
+    <div class="container">
         <div class="row loginRow">
-            <div class="col-md-6" id="loginCol1">
+            <div class="col-md-6" style="background: url('/static/img01.jpg') center / cover no-repeat; padding: 0;">
                 <div></div>
             </div>
-            <div class="col-md-6" id="loginCol2">
-                <div class="loginWrapper">
+            <div class="col-md-6 loginCol2">
+                <div class="loginColWrapper">
                     <div>
                         <div>
-                            <p class="headingParagraph">User Login</p>
+                            <p style="font-size: 25px;">User Login</p>
                         </div>
-                        <div class="loginCol">
-                            <i class="fa fa-envelope mailIcon" ></i>
-                            <input type="text" class="loginInput" placeholder="Email" name="email" autocomplete="on" autofocus="" inputmode="email" required="">
+                        <div class="inputDiv">
+                            <i class="fa fa-envelope emailIcon"></i>
+                            <input class="input" type="email" placeholder="Email" name="email" autocomplete="on" required>
                         </div>
-                        <div class="loginCol">
-                            <i class="fa fa-lock lockIcon" ></i>
-                            <input type="password" class="loginInput" placeholder="Password" autocomplete="off" required="" minlength="6" maxlength="20" name="password">
+
+                        <div class="inputDiv">
+                            <i class="fa fa-lock pwdIcon"></i>
+                            <input class="input" type="password" placeholder="Password" name="password" minlength="6" maxlength="20" required>
                         </div>
-                        <button type="button" class="btn btn-primary btn-lg btn-block subBtn">Login</button>
-<!--                        <div style="background: #95e47a;border-radius: 25px;padding: 10px;margin-top: 15px;width: 400px;">-->
-<!--                            <div>-->
-<!--                                <button type="submit" class="text-center btn btn-outline-primary" style="margin-bottom: 0px;color: rgb(255,255,255);font-weight: normal;">Login</button>-->
-<!--                            </div>-->
-<!--                        </div>-->
+
+                        <label id="cookieSignIn">
+                            <input type="checkbox" name="keepSignedIn"> Keep me signed in
+                        </label>
+
+                        <button type="button" class="btn btn-primary btn-lg btn-block loginBtn">Login</button>
+
                         <div>
-                            <p class="text-center registerLinkParagraph">Want to register? <a href="/signup">Click here</a></p>
+                            <p class="text-center" id="linkToSignup">Want to register? <a href="#">Click here</a>.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
