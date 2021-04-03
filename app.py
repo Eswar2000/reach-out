@@ -10,7 +10,6 @@ app.config['MYSQL_PASSWORD'] = 'Thestylishstar1'
 app.config['MYSQL_DB'] = 'test_db'
 
 mysql.init_app(app)
-
 currUser = {}
 
 @app.route('/')
@@ -36,13 +35,17 @@ def signup():
         email = request.form["email"]
         currUser['uname']=uname
         currUser['email']=email
+        if pw != cnfPw:
+            err = "Confirm Password didn't match"
+            return render_template('signup.html')
         cursor = mysql.connection.cursor()
         query = "INSERT INTO signup(uname,pw,email) VALUES(%s,%s,%s)"
-        cursor.execute(query,(uname,pw,cnfPw,email))
+        cursor.execute(query,(uname,pw,email))
         mysql.connection.commit()
         cursor.close()
         return render_template("homepage.html")
-    return render_template('signup.html')
+    else:
+        return render_template('signup.html')
 
 
 if __name__ == '__main__':
