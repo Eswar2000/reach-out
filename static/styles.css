@@ -3,13 +3,15 @@ body {
     font-weight: bold;
     letter-spacing: 1px;
     background: linear-gradient(-90deg, rgb(193,61,255), rgb(35,96,214));
-    margin-top: 15vh;
 }
 
 .container {
     margin: -1px;
 }
 
+#myContent {
+    margin-top: 15vh;
+}
 
 .loginRow {
     padding: 20px;
@@ -99,6 +101,10 @@ body {
 }
 
 /* ------------------------------------------------------------END OF SIGN UP PAGE------------------------------------------------------------ */
+
+.navColor {
+    background-color: white;
+}
 
 #logo {
   max-height: 40px;
