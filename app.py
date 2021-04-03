@@ -6,7 +6,7 @@ app = Flask(__name__)
 mysql = MySQL()
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Thestylishstar1'
+app.config['MYSQL_PASSWORD'] = 'pieceofshit'
 app.config['MYSQL_DB'] = 'test_db'
 
 mysql.init_app(app)
@@ -19,11 +19,23 @@ def home():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    if request.method == 'GET':
-        return render_template('login.html', err="")
-    else:
-        uname = request.form['username']
+    if request.method == 'POST':
+        email = request.form['email']
         password = request.form['password']
+        cursor = mysql.connection.cursor()
+        query = "select * from signup where email like '{}' and pw like '{}'".format(email,password)
+        cursor.execute(query)
+        temp = cursor.fetchall()
+        mysql.connection.commit()
+        cursor.close()
+        if(len(temp)>0):
+            return render_template('dashboard.html',user=temp[0][0])
+        else:
+            return render_template('login.html',err="Username Or Password Is Wrong")
+    else:
+        return render_template('login.html',err="")
+
+
 
 
 @app.route('/signup', methods=['POST', 'GET'])
@@ -35,17 +47,17 @@ def signup():
         email = request.form["email"]
         currUser['uname']=uname
         currUser['email']=email
-        if pw != cnfPw:
-            err = "Confirm Password didn't match"
-            return render_template('signup.html')
+        if(pw != cnfPw):
+            return render_template('signup.html',err="Password Fields Didn't Match")
         cursor = mysql.connection.cursor()
         query = "INSERT INTO signup(uname,pw,email) VALUES(%s,%s,%s)"
         cursor.execute(query,(uname,pw,email))
         mysql.connection.commit()
         cursor.close()
-        return render_template("homepage.html")
+        return render_template("dashboard.html",user=uname)
     else:
-        return render_template('signup.html')
+        return render_template("signup.html",err="")
+    
 
 
 if __name__ == '__main__':

@@ -22,24 +22,29 @@
                         <div>
                             <p style="font-size: 25px;">User Login</p>
                         </div>
-                        <div class="inputDiv">
-                            <i class="fa fa-envelope emailIcon"></i>
-                            <input class="input" type="email" placeholder="Email" name="email" autocomplete="on" required>
-                        </div>
-
-                        <div class="inputDiv">
-                            <i class="fa fa-lock pwdIcon"></i>
-                            <input class="input" type="password" placeholder="Password" name="password" minlength="6" maxlength="20" required>
-                        </div>
-
-                        <label id="cookieSignIn">
-                            <input type="checkbox" name="keepSignedIn"> Keep me signed in
-                        </label>
-
-                        <button type="button" class="btn btn-primary btn-lg btn-block loginBtn">Login</button>
-
+                        <form method='post'>
+                            <div>
+                                <div class="inputDiv">
+                                    <i class="fa fa-envelope emailIcon"></i>
+                                    <input class="input" type="email" placeholder="Email" name="email" autocomplete="on" required>
+                                </div>
+        
+                                <div class="inputDiv">
+                                    <i class="fa fa-lock pwdIcon"></i>
+                                    <input class="input" type="password" placeholder="Password" name="password" minlength="6" maxlength="20" required>
+                                </div>
+        
+                                <label id="cookieSignIn">
+                                    <input type="checkbox" name="keepSignedIn"> Keep me signed in
+                                </label>
+        
+                                <button type="submit" class="btn btn-primary btn-lg btn-block loginBtn">Login</button>
+                                <span>{{err}}</span>
+                            </div>
+                        </form>
+                        
                         <div>
-                            <p class="text-center" id="linkToSignup">Want to register? <a href="#">Click here</a>.</p>
+                            <p class="text-center" id="linkToSignup">Want to register? <a href="/signup">Click here</a>.</p>
                         </div>
                     </div>
                 </div>
