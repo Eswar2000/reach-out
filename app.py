@@ -1,23 +1,17 @@
 import os
-from flask import Flask, render_template, redirect, url_for, request
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from flask import Flask, jsonify, request, redirect, render_template
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-# Initialize
-db = SQLAlchemy(app)
+mysql = MySQL()
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'Thestylishstar1'
+app.config['MYSQL_DB'] = 'test_db'
 
+mysql.init_app(app)
 
-# model
-class Test(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<Name %r>' % self.id
-
+currUser = {}
 
 @app.route('/')
 def home():
@@ -35,10 +29,20 @@ def login():
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
-    if request.method == 'GET':
-        return render_template('signup.html', err="GET")
-    else:
-        return render_template('signup.html', err="POST")
+    if request.method == 'POST':
+        uname = request.form["username"]
+        pw = request.form["password"]
+        cnfPw = request.form["confirmPwd"]
+        email = request.form["email"]
+        currUser['uname']=uname
+        currUser['email']=email
+        cursor = mysql.connection.cursor()
+        query = "INSERT INTO signup(uname,pw,email) VALUES(%s,%s,%s)"
+        cursor.execute(query,(uname,pw,cnfPw,email))
+        mysql.connection.commit()
+        cursor.close()
+        return render_template("homepage.html")
+    return render_template('signup.html')
 
 
 if __name__ == '__main__':
