@@ -100,5 +100,45 @@ body {
 
 /* ------------------------------------------------------------END OF SIGN UP PAGE------------------------------------------------------------ */
 
+#logo {
+  max-height: 40px;
+  margin-right: 10px;
+  margin-top: -3px;
+  display: inline-block;
+  border-radius: 100%;
+}
+
+#jumbo {
+  text-align: center;
+  padding: 40px;
+  height: 400px;
+}
+
+#jumbo .jumbotron {
+  border-radius: 20px;
+  padding: 40px;
+  background-color: rgba(255,255,255,0.75);
+  max-width: 1000px;
+  height: 250px;
+  margin: 50px auto;
+}
+
+.site-section {
+  text-align: center;
+  padding: 50px 0 60px;
+}
+
+.site-section h1 {
+  font-weight: normal;
+  margin-bottom: 30px;
+}
+
+#welcome {
+  max-width: 800px;
+  font-size: 20px;
+  margin: 0 auto;
+}
 
 
+/*background: url(../../assets/img/img02.jpg) no-repeat;*/
+/*background-size: cover;*/
