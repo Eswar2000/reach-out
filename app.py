@@ -1,6 +1,8 @@
 import os
 from flask import Flask, jsonify, request, redirect, render_template
 from flask_mysqldb import MySQL
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 mysql = MySQL()
@@ -23,12 +25,14 @@ def login():
         email = request.form['email']
         password = request.form['password']
         cursor = mysql.connection.cursor()
-        query = "select * from signup where email like '{}' and pw like '{}'".format(email,password)
+        query = "select * from signup where email='{}'".format(email)
         cursor.execute(query)
         temp = cursor.fetchall()
         mysql.connection.commit()
         cursor.close()
-        if(len(temp)>0):
+        print(temp)
+        
+        if(check_password_hash(temp[0][1],password)):
             return render_template('dashboard.html',user=temp[0][0])
         else:
             return render_template('login.html',err="Username Or Password Is Wrong")
@@ -49,9 +53,10 @@ def signup():
         currUser['email']=email
         if(pw != cnfPw):
             return render_template('signup.html',err="Password Fields Didn't Match")
+        hashedPwd = generate_password_hash(pw, "sha256")
         cursor = mysql.connection.cursor()
         query = "INSERT INTO signup(uname,pw,email) VALUES(%s,%s,%s)"
-        cursor.execute(query,(uname,pw,email))
+        cursor.execute(query,(uname,hashedPwd,email))
         mysql.connection.commit()
         cursor.close()
         return render_template("dashboard.html",user=uname)
