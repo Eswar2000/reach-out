@@ -20,7 +20,7 @@
                 <div class="loginColWrapper">
                     <div>
                         <div>
-                            <p style="font-size: 25px;">User Login</p>
+                            <p id="authHead">User Login</p>
                         </div>
                         <form method='post'>
                             <div>
@@ -39,9 +39,13 @@
                                 </label>
         
                                 <button type="submit" class="btn btn-primary btn-lg btn-block loginBtn">Login</button>
-                                <span>{{err}}</span>
+                                
                             </div>
                         </form>
+
+                        <div class="authErrDiv">
+                            <span>{{err}}</span>
+                        </div>
                         
                         <div>
                             <p class="text-center" id="linkToSignup">Want to register? <a href="/signup">Click here</a>.</p>
