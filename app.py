@@ -31,9 +31,12 @@ def signInQuery(email, password):
     temp = cursor.fetchall()
     mysql.connection.commit()
     cursor.close()
+    if len(temp) != 1:
+        return False
     if check_password_hash(temp[0][2], password):
         session['user'] = temp[0][0]
         session['name'] = temp[0][1]
+        session['requests'] = None
         return True
     return False
 
@@ -51,7 +54,7 @@ def signin():
                 resp = make_response(redirect(url_for('dashboard')))
                 if keep:
                     cookieDict = json.dumps({'email': email, "pass": password})
-                    resp.set_cookie('login', cookieDict, max_age=60*60*24*7)
+                    resp.set_cookie('login', cookieDict, max_age=60 * 60 * 24 * 7)
                 return resp
             else:
                 return render_template('signin.html', err="Username Or Password Is Wrong")
@@ -96,6 +99,27 @@ def signup():
             return render_template("signup.html", err="")
 
 
+def getRequests():
+    if 'user' in session:
+        user = session['user']
+        query = "SELECT * FROM request WHERE toID={}".format(user)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        session['requests'] = cursor.fetchall()
+        cursor.close()
+    return
+
+
+def getAllUsers():
+    if 'user' in session:
+        query = "SELECT * FROM users where userid != {}".format(session['user'])
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        session['allUsers'] = cursor.fetchall()
+        cursor.close()
+    return None
+
+
 @app.route('/dashboard', methods=['POST', 'GET'])
 def dashboard():
     if 'user' in session:
@@ -112,9 +136,75 @@ def dashboard():
 def signout():
     session.pop('user', None)
     session.pop('name', None)
+    session.pop('requests', None)
+    session.pop('allUsers', None)
     resp = make_response(redirect(url_for('home')))
     resp.set_cookie('login', "CLEAR", max_age=0)
     return resp
+
+
+@app.route('/addRequest', methods=['GET'])
+def addRequest():
+    if 'user' in session:
+        fromUser, toUser = session['user'], request.args.get('id')
+        if fromUser == toUser:
+            return redirect(url_for('dashboard'))
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM friends WHERE uID={} and fID={}".format(fromUser, toUser)
+        cursor.execute(query)
+        temp = cursor.fetchall()
+        if len(temp) == 0:
+            query = "INSERT INTO request(fromID, toID) VALUES({},{})".format(fromUser, toUser)
+            cursor.execute(query)
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('signin'))
+
+
+@app.route('/addFriend', methods=['GET'])
+def addFriend():
+    if 'user' in session:
+        fromUser, toUser = request.args.get('id'), session['user']
+        if fromUser == toUser:
+            return redirect(url_for('dashboard'))
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM request WHERE fromID={} and toID={}".format(fromUser, toUser)
+        cursor.execute(query)
+        temp = cursor.fetchall()
+        if len(temp) == 1:
+            queryDEL = "DELETE FROM request WHERE fromID={} and toId={}".format(fromUser, toUser)
+            queryADD1 = "INSERT INTO friends(uID, fID) VALUES({},{})".format(fromUser, toUser)
+            queryADD2 = "INSERT INTO friends(uID, fID) VALUES({},{})".format(toUser, fromUser)
+            cursor.execute(queryDEL)
+            cursor.execute(queryADD1)
+            cursor.execute(queryADD2)
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('signin'))
+
+
+@app.route('/declineRequest', methods=['GET'])
+def declineRequest():
+    if 'user' in session:
+        fromUser, toUser = request.args.get('id'), session['user']
+        if fromUser == toUser:
+            return redirect(url_for('dashboard'))
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM request WHERE fromID={} and toID={}".format(fromUser, toUser)
+        cursor.execute(query)
+        temp = cursor.fetchall()
+        if len(temp) == 1:
+            queryDEL = "DELETE FROM request WHERE fromID={} and toId={}".format(fromUser, toUser)
+            cursor.execute(queryDEL)
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('signin'))
 
 
 if __name__ == '__main__':
