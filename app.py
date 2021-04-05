@@ -37,6 +37,8 @@ def signInQuery(email, password):
         session['user'] = temp[0][0]
         session['name'] = temp[0][1]
         session['requests'] = None
+        session['email'] = temp[0][3]
+        session['allUsers'] = None
         return True
     return False
 
@@ -102,11 +104,12 @@ def signup():
 def getRequests():
     if 'user' in session:
         user = session['user']
-        query = "SELECT * FROM request WHERE toID={}".format(user)
+        query = "SELECT fromID, uname FROM request,signup WHERE request.fromID=signup.userid and toID={}".format(user)
         cursor = mysql.connection.cursor()
         cursor.execute(query)
         session['requests'] = cursor.fetchall()
         cursor.close()
+    getAllUsers()
     return
 
 
@@ -125,7 +128,8 @@ def dashboard():
     if 'user' in session:
         user = session['name']
         if request.method == 'GET':
-            return render_template('dashboard.html', user=user)
+            getRequests()
+            return render_template('dashboard.html', user=user,email=session['email'],userid=session['user'],req=session['requests'])
         else:
             return render_template('dashboard.html', user="Not Completed")
     else:
@@ -138,6 +142,7 @@ def signout():
     session.pop('name', None)
     session.pop('requests', None)
     session.pop('allUsers', None)
+    session.pop('email',None)
     resp = make_response(redirect(url_for('home')))
     resp.set_cookie('login', "CLEAR", max_age=0)
     return resp
