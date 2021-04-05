@@ -3,14 +3,17 @@ import os
 from flask import Flask, request, redirect, render_template, session, url_for, make_response
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'KRACKHEAD$1234'
+app.secret_key = os.environ.get('APP_SECRET_KEY')
 mysql = MySQL()
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'pieceofshit'
-app.config['MYSQL_DB'] = 'test_db'
+app.config['MYSQL_HOST'] = os.getenv('DB_HOST')
+app.config['MYSQL_USER'] = os.getenv('DB_USER')
+app.config['MYSQL_PASSWORD'] = os.getenv('DB_PASS')
+app.config['MYSQL_DB'] = os.getenv('DB_SCHEMA')
 
 mysql.init_app(app)
 currUser = {}
@@ -115,5 +118,6 @@ def signout():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5555))
-    app.run(host='localhost', port=port, debug=True)
+    port = int(os.environ.get('APP_PORT'))
+    host = os.environ.get('APP_HOST')
+    app.run(host=host, port=port, debug=True)
