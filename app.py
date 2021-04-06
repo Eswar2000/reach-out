@@ -129,7 +129,14 @@ def dashboard():
         user = session['name']
         if request.method == 'GET':
             getRequests()
-            return render_template('dashboard.html', user=user,email=session['email'],userid=session['user'],req=session['requests'])
+            renderDetails = {
+                'user': user,
+                'email': session['email'],
+                'userid': session['user'],
+                'req': session['requests'],
+                'all': session['allUsers']
+            }
+            return render_template('dashboard.html', required=renderDetails)
         else:
             return render_template('dashboard.html', user="Not Completed")
     else:
