@@ -142,7 +142,6 @@ def getMatrix():
     userMatrix = [[sys.maxsize for _ in range(userNum)] for __ in range(userNum)]
     for i in range(userNum):
         userMatrix[i][i] = 0
-    print(temp)
     for elem in temp:
         userMatrix[elem[0]][elem[1]] = 1
     floyd(userNum, userMatrix)
@@ -182,6 +181,7 @@ def floyd(V, userMatrix):
         distance = retVal(levelFriend[fromVal][toVal])
         newList.append((elem[0], elem[1], distance))
     session['allUsers'] = newList
+    prims(userMatrix, V)
 
 
 @app.route('/dashboard', methods=['POST', 'GET'])
@@ -190,7 +190,6 @@ def dashboard():
         user = session['name']
         if request.method == 'GET':
             getRequests()
-            print(session['outReq'])
             renderDetails = {
                 'user': user,
                 'email': session['email'],
@@ -311,9 +310,73 @@ def removeFriend():
 @app.route('/sendMessage', methods=['GET'])
 def sendMessage():
     if 'user' in session:
-        return render_template('message.html')
+        renderDetails = {
+            'non': session['nonReach'],
+            'edgeList': session['edgeList']
+        }
+        return render_template('message.html', required=renderDetails)
     else:
         return redirect(url_for('signin'))
+
+
+def minDistance(dist, visited, vertices):
+    min = sys.maxsize
+    min_index = -1
+    for ver in range(vertices):
+        if dist[ver] < min and visited[ver] == False:
+            min = dist[ver]
+            min_index = ver
+    return min_index
+
+
+def idMapping(edgeList, nonReach):
+    query = "SELECT * FROM users"
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    temp = list(cursor.fetchall())
+    for i in range(len(edgeList)):
+        edgeList[i] = (temp[edgeList[i][0]][1], temp[edgeList[i][1]][1])
+    for i in range(len(nonReach)):
+        nonReach[i] = temp[nonReach[i]][1]
+    session['edgeList'] = edgeList
+    session['nonReach'] = nonReach
+    mysql.connection.commit()
+    cursor.close()
+
+
+def backtrackMST(a, vertices):
+    edgeList = []
+    nonReach = []
+    for i in range(vertices):
+        if a[i] is None:
+            nonReach.append(i)
+            continue
+        elif a[i] == -1:
+            continue
+        else:
+            edgeList.append((i, a[i]))
+    idMapping(edgeList, nonReach)
+
+
+def prims(userMatrix, vertices):
+    temp = 2
+    g = [[0 for _ in range(vertices)] for __ in range(vertices)]
+    for i in range(vertices):
+        for j in range(vertices):
+            g[i][j] = userMatrix[i][j] if userMatrix[i][j] != sys.maxsize else 0
+    parentArr = [None] * vertices
+    dist = [sys.maxsize] * vertices
+    dist[temp], parentArr[temp] = 0, -1
+    visited = [False] * vertices
+    for _ in range(vertices):
+        u = minDistance(dist, visited, vertices)
+        if u != -1:
+            visited[u] = True
+            for ver in range(vertices):
+                if 0 < g[u][ver] < dist[ver] and visited[ver] == False:
+                    dist[ver] = g[u][ver]
+                    parentArr[ver] = u
+    backtrackMST(parentArr, vertices)
 
 
 if __name__ == '__main__':
