@@ -39,10 +39,7 @@ def signInQuery(email, password):
     if check_password_hash(temp[0][2], password):
         session['user'] = temp[0][0]
         session['name'] = temp[0][1]
-        session['requests'] = None
         session['email'] = temp[0][3]
-        session['allUsers'] = None
-        session['outReq'] = None
         return True
     return False
 
@@ -213,6 +210,8 @@ def signout():
     session.pop('allUsers', None)
     session.pop('email', None)
     session.pop('outReq', None)
+    session.pop('nonReach', None)
+    session.pop('edgeList', None)
     resp = make_response(redirect(url_for('home')))
     resp.set_cookie('login', "CLEAR", max_age=0)
     return resp
