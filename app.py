@@ -45,6 +45,7 @@ def signInQuery(email, password):
 
 @app.route('/signin', methods=['POST', 'GET'])
 def signin():
+    getMatrix()
     if 'user' in session:
         return redirect(url_for('dashboard'))
     else:
@@ -99,6 +100,7 @@ def signup():
                     print("used cookie")
                     return redirect(url_for('signin'))
             return render_template("signup.html", err="")
+
 
 
 def getRequests():
