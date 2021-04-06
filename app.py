@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+from cryptography.fernet import Fernet
 from flask import Flask, request, redirect, render_template, session, url_for, make_response
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -39,13 +41,13 @@ def signInQuery(email, password):
         session['requests'] = None
         session['email'] = temp[0][3]
         session['allUsers'] = None
+        session['outReq'] = None
         return True
     return False
 
 
 @app.route('/signin', methods=['POST', 'GET'])
 def signin():
-    getMatrix()
     if 'user' in session:
         return redirect(url_for('dashboard'))
     else:
@@ -66,7 +68,6 @@ def signin():
             if cookieDict:
                 cookieDict = json.loads(cookieDict)
                 if signInQuery(cookieDict['email'], cookieDict['pass']):
-                    print("used cookie")
                     return redirect(url_for('signin'))
             return render_template('signin.html', err="")
 
@@ -97,10 +98,8 @@ def signup():
             if cookieDict:
                 cookieDict = json.loads(cookieDict)
                 if signInQuery(cookieDict['email'], cookieDict['pass']):
-                    print("used cookie")
                     return redirect(url_for('signin'))
             return render_template("signup.html", err="")
-
 
 
 def getRequests():
@@ -110,6 +109,10 @@ def getRequests():
         cursor = mysql.connection.cursor()
         cursor.execute(query)
         session['requests'] = cursor.fetchall()
+        query = "SELECT toID FROM request WHERE fromId={}".format(user)
+        cursor = mysql.connection.cursor()
+        cursor.execute(query)
+        session['outReq'] = cursor.fetchall()
         cursor.close()
     getAllUsers()
     return
@@ -122,7 +125,58 @@ def getAllUsers():
         cursor.execute(query)
         session['allUsers'] = cursor.fetchall()
         cursor.close()
+        getMatrix()
     return None
+
+
+def getMatrix():
+    cursor = mysql.connection.cursor()
+    query = "SELECT * from friends"
+    cursor.execute(query)
+    temp = cursor.fetchall()
+    userNum = len(session['allUsers']) + 1
+    userMatrix = [[sys.maxsize for _ in range(userNum)] for __ in range(userNum)]
+    for i in range(userNum):
+        userMatrix[i][i] = 0
+    for elem in temp:
+        userMatrix[elem[0]][elem[1]] = 1
+    floyd(userNum, userMatrix)
+
+
+def retVal(value):
+    if value == sys.maxsize:
+        return "N/A"
+    if value == 1:
+        return "Friend"
+    if value % 10 == 1:
+        if value // 10 == 1:
+            return str(value) + "th"
+        return str(value // 10) + "1st"
+    if value % 10 == 2:
+        if value // 10 == 1:
+            return str(value) + "th"
+        return str(value // 10) + "2nd" if value // 10 != 0 else "2nd"
+    if value % 10 == 3:
+        if value // 10 == 1:
+            return str(value) + "th"
+        return str(value // 10) + "3rd" if value // 10 != 0 else "3rd"
+    else:
+        return str(value) + "th"
+
+
+def floyd(V, userMatrix):
+    levelFriend = list(map(lambda i: list(map(lambda j: j, i)), userMatrix))
+    for k in range(V):
+        for i in range(V):
+            for j in range(V):
+                levelFriend[i][j] = min(levelFriend[i][j], levelFriend[i][k] + levelFriend[k][j])
+    fromVal = session['user']
+    newList = []
+    for elem in session['allUsers']:
+        toVal = elem[0]
+        distance = retVal(levelFriend[fromVal][toVal])
+        newList.append((elem[0], elem[1], distance))
+    session['allUsers'] = newList
 
 
 @app.route('/dashboard', methods=['POST', 'GET'])
@@ -131,11 +185,13 @@ def dashboard():
         user = session['name']
         if request.method == 'GET':
             getRequests()
+            print(session['outReq'])
             renderDetails = {
                 'user': user,
                 'email': session['email'],
                 'userid': session['user'],
-                'req': session['requests'],
+                'incomingReq': session['requests'],
+                'outgoingReq': session['outReq'],
                 'all': session['allUsers']
             }
             return render_template('dashboard.html', required=renderDetails)
@@ -151,7 +207,8 @@ def signout():
     session.pop('name', None)
     session.pop('requests', None)
     session.pop('allUsers', None)
-    session.pop('email',None)
+    session.pop('email', None)
+    session.pop('outReq', None)
     resp = make_response(redirect(url_for('home')))
     resp.set_cookie('login', "CLEAR", max_age=0)
     return resp
