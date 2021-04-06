@@ -5,6 +5,11 @@ body {
     background: linear-gradient(-90deg, rgb(193,61,255), rgb(35,96,214));
 }
 
+.toolbar {
+    background: linear-gradient(45deg, #EBF5CF 20%, #BEFCFF 55%);
+    /*background: linear-gradient(45deg, #0081CF 50%, #7543D7 80%);*/
+    paddingRight: 24;
+}
 
 #myContent {
     margin-top: 15vh;
