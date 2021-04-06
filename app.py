@@ -164,8 +164,11 @@ def addRequest():
         cursor = mysql.connection.cursor()
         query = "SELECT * FROM friends WHERE uID={} and fID={}".format(fromUser, toUser)
         cursor.execute(query)
-        temp = cursor.fetchall()
-        if len(temp) == 0:
+        temp0 = cursor.fetchall()
+        query = "SELECT * FROM request WHERE fromID={} and toID={}".format(fromUser, toUser)
+        cursor.execute(query)
+        temp1 = cursor.fetchall()
+        if len(temp0) == 0 and len(temp1) == 0:
             query = "INSERT INTO request(fromID, toID) VALUES({},{})".format(fromUser, toUser)
             cursor.execute(query)
         mysql.connection.commit()

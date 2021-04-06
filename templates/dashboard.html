@@ -64,12 +64,14 @@
                       <h5>All Users</h5>
                       <ul class="w3-ul w3-card-4 w3-white">
                           {% if required['all']|length == 0 %}
-                              <p>No Request Currently</p>
+                              <p>No Users</p>
                             {% else %}
                               {% for item in required['all'] %}
-                                <li class="w3-padding-16 ">
-                                  <span>{{ item[1] }}</span>
-                                  <span class="float-right">Level:0</span><br>
+                                  <li class="w3-padding-16 ">
+                                      <span>{{ item[1] }}</span>
+                                      <span class="float-right"><a href="/addRequest?id={{ item[0] }}&"> <i class="fa fa-plus-circle"> </i> </a></span>
+                                      <span class="float-right"><pre> Level:0 </pre></span>
+                                      <br>
                                 </li>
                               {% endfor %}
                             {% endif %}
