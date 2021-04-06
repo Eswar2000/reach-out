@@ -142,6 +142,7 @@ def getMatrix():
     userMatrix = [[sys.maxsize for _ in range(userNum)] for __ in range(userNum)]
     for i in range(userNum):
         userMatrix[i][i] = 0
+    print(temp)
     for elem in temp:
         userMatrix[elem[0]][elem[1]] = 1
     floyd(userNum, userMatrix)
