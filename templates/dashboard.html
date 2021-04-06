@@ -127,10 +127,10 @@
                           <span>{{item[1]}}</span>
                           <div class="w3-row ">
                             <div class="w3-half">
-                              <button class="w3-button w3-block w3-blue w3-section" title="Accept"><a href= "/addFriend?id=${item[0]}&"><i class="fa fa-check"></i></a></button>
+                              <button class="w3-button w3-block w3-blue w3-section" title="Accept"><a href= "/addFriend?id={{item[0]}}&"><i class="fa fa-check"></i></a></button>
                           </div>
                           <div class="w3-half">
-                            <button class="w3-button w3-block w3-pink w3-section" title="Decline"><i class="fa fa-remove"></i></button>
+                            <button class="w3-button w3-block w3-pink w3-section" title="Decline"><a href= "/declineRequest?id={{item[0]}}&"></a><i class="fa fa-remove"></i></button>
                           </div>
                         </li>
 
