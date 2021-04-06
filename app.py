@@ -359,7 +359,7 @@ def backtrackMST(a, vertices):
 
 
 def prims(userMatrix, vertices):
-    temp = 2
+    temp = session['user']
     g = [[0 for _ in range(vertices)] for __ in range(vertices)]
     for i in range(vertices):
         for j in range(vertices):
