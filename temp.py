@@ -1,8 +1,5 @@
 import sys
 
-
-
-
 def minDistance(dist, visited):
     min = sys.maxsize
     min_index = -1

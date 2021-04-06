@@ -16,6 +16,7 @@ app.config['MYSQL_HOST'] = os.getenv('DB_HOST')
 app.config['MYSQL_USER'] = os.getenv('DB_USER')
 app.config['MYSQL_PASSWORD'] = os.getenv('DB_PASS')
 app.config['MYSQL_DB'] = os.getenv('DB_SCHEMA')
+crypt = Fernet(key=os.getenv('ENCRY_KEY').encode())
 
 mysql.init_app(app)
 currUser = {}
@@ -59,6 +60,7 @@ def signin():
                 resp = make_response(redirect(url_for('dashboard')))
                 if keep:
                     cookieDict = json.dumps({'email': email, "pass": password})
+                    cookieDict = crypt.encrypt(cookieDict.encode())
                     resp.set_cookie('login', cookieDict, max_age=60 * 60 * 24 * 7)
                 return resp
             else:
@@ -66,6 +68,7 @@ def signin():
         else:
             cookieDict = request.cookies.get('login')
             if cookieDict:
+                cookieDict = crypt.decrypt(cookieDict.encode()).decode()
                 cookieDict = json.loads(cookieDict)
                 if signInQuery(cookieDict['email'], cookieDict['pass']):
                     return redirect(url_for('signin'))
@@ -96,6 +99,7 @@ def signup():
         else:
             cookieDict = request.cookies.get('login')
             if cookieDict:
+                cookieDict = crypt.decrypt(cookieDict.encode()).decode()
                 cookieDict = json.loads(cookieDict)
                 if signInQuery(cookieDict['email'], cookieDict['pass']):
                     return redirect(url_for('signin'))
@@ -114,7 +118,7 @@ def getRequests():
         cursor.execute(query)
         session['outReq'] = cursor.fetchall()
         cursor.close()
-    getAllUsers()
+        getAllUsers()
     return
 
 
@@ -277,6 +281,36 @@ def declineRequest():
         mysql.connection.commit()
         cursor.close()
         return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('signin'))
+
+
+@app.route('/removeFriend', methods=['GET'])
+def removeFriend():
+    if 'user' in session:
+        fromUser, toUser = request.args.get('id'), session['user']
+        if fromUser == toUser:
+            return redirect(url_for('dashboard'))
+        cursor = mysql.connection.cursor()
+        query = "SELECT * FROM friends WHERE uID={} and fID={}".format(fromUser, toUser)
+        cursor.execute(query)
+        temp = cursor.fetchall()
+        if len(temp) == 1:
+            queryDEL1 = "DELETE FROM friends WHERE uID={} and fID={}".format(fromUser, toUser)
+            queryDEL2 = "DELETE FROM friends WHERE uID={} and fID={}".format(toUser, fromUser)
+            cursor.execute(queryDEL1)
+            cursor.execute(queryDEL2)
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('signin'))
+
+
+@app.route('/sendMessage', methods=['GET'])
+def sendMessage():
+    if 'user' in session:
+        return render_template('message.html')
     else:
         return redirect(url_for('signin'))
 
